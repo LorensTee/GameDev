@@ -26,7 +26,8 @@ public class GameManager : MonoBehaviour
     public TMP_Text messageText;
 
     private float timeLeft;
-    private bool runActive;
+    private bool timerRunning;
+    private bool gameOver;
 
     private Vector3 spawnPosition;
     private Quaternion spawnRotation;
@@ -80,12 +81,22 @@ public class GameManager : MonoBehaviour
         }
 
         healthManager.ResetHealth();
-        StartRun();
+        UpdateHealthUI(healthManager.CurrentHealth);
+        timeLeft = timeLimit;
+        UpdateTimerUI();
+        
+        timerRunning = false;
+        gameOver = false;
+        if (messageText != null)
+            messageText.text = "Step out to begin!";
+
+        if (laserSpawner != null)
+            laserSpawner.StartSpawning();
     }
 
     private void Update()
     {
-        if (!runActive)
+        if (!timerRunning || gameOver)
             return;
 
         timeLeft -= Time.deltaTime;
@@ -100,27 +111,29 @@ public class GameManager : MonoBehaviour
         UpdateTimerUI();
     }
 
-    private void StartRun()
+    public bool IsRunActive => timerRunning;
+    
+    public void StartTimer()
     {
-        runActive = true;
+        if (timerRunning || gameOver)
+            return;
+
+        timerRunning = true;
         timeLeft = timeLimit;
+        UpdateTimerUI();
 
         if (messageText != null)
             messageText.text = "";
-
-        if (healthManager != null)
-        {
-            healthManager.ResetHealth();
-            UpdateHealthUI(healthManager.CurrentHealth);
-        }
-        UpdateTimerUI();
-        
-        laserSpawner.StartSpawning();
+    }
+    
+    public void StartRun()
+    {
+        StartTimer();
     }
 
     public void PlayerDied()
     {
-        if (!runActive)
+        if (gameOver)
             return;
 
         ResetRun();
@@ -128,13 +141,16 @@ public class GameManager : MonoBehaviour
 
     private void ResetRun()
     {
-        runActive = false;
+        bool wasTimerRunning = timerRunning;
+        timerRunning = false;
 
         if (laserSpawner != null)
             laserSpawner.StopSpawning();
         DestroyAllLasers();
         ResetPlayerSpeed();
         ResetAllPanels();
+        if (healthManager != null)
+            healthManager.ResetHealth();
         
         if (playerController != null)
             playerController.enabled = false;
@@ -149,16 +165,31 @@ public class GameManager : MonoBehaviour
             characterController.enabled = true;
         if (playerController != null)
             playerController.enabled = true;
+        
+        if (laserSpawner != null)
+            laserSpawner.StartSpawning();
 
-        StartRun();
+        if (wasTimerRunning)
+        {
+            timerRunning = true;
+            timeLeft = timeLimit;
+            UpdateTimerUI();
+            if (messageText != null)
+                messageText.text = "";
+        }
+        else if (messageText != null)
+        {
+            messageText.text = "Step out to begin!";
+        }
     }
 
     public void WinRun()
     {
-        if (!runActive)
+        if (gameOver)
             return;
 
-        runActive = false;
+        gameOver = true;
+        timerRunning = false;
 
         if (laserSpawner != null)
             laserSpawner.StopSpawning();
