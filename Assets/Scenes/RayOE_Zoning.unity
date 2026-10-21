@@ -2446,8 +2446,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 7a5dbbec63c4b099b93fec4d0679e756, type: 2}
     - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
+      propertyPath: MoveSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8616685848737228371, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: SprintSpeed
-      value: 8
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8616685848737228372, guid: c5efc39a8aaf6e64ea40e9ad573e9b47, type: 3}
       propertyPath: m_Name
@@ -4467,7 +4471,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MovingHazard
   pointA: {fileID: 1952751097}
   pointB: {fileID: 389089310}
-  moveSpeed: 1
+  moveSpeed: 0.7
   shape: 0
   playerLayer:
     serializedVersion: 2
@@ -6137,7 +6141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MovingHazard
   pointA: {fileID: 274148466}
   pointB: {fileID: 1579643568}
-  moveSpeed: 1
+  moveSpeed: 0.7
   shape: 1
   playerLayer:
     serializedVersion: 2
@@ -9753,7 +9757,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MovingHazard
   pointA: {fileID: 1075973648}
   pointB: {fileID: 1097309840}
-  moveSpeed: 1
+  moveSpeed: 0.7
   shape: 2
   playerLayer:
     serializedVersion: 2
